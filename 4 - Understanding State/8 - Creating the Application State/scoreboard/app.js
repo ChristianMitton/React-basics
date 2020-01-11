@@ -1,25 +1,24 @@
-const players = [
-  {
-    name: "Guil",
-    score: 50,
-    id: 1
-  },
-  {
-    name: "Treasure",
-    score: 85,
-    id: 2
-  },
-  {
-    name: "Ashley",
-    score: 95,
-    id: 3
-  },
-  {
-    name: "James",
-    score: 80,
-    id: 4
-  }
-];
+/**
+ * ? types to state to consider:
+ * 
+ *  1.) Application state
+ *    - Data avaiable to the entire application
+ * 
+ *  2.) Component State 
+ *    - Data available to instances of components
+ * 
+ */
+
+/**
+   types to state to consider:
+1.) Application state
+    - Data available to the entire application
+
+  2.) Component state
+  
+
+ 
+ */
 
 const Header = (props) => {
   return (
@@ -34,6 +33,8 @@ const Player = (props) => {
   return (
     <div className="player">
       <span className="player-name">
+      {/* Note how an annonymous is called in order to use function passed through prop*/}
+      <button className="remove-player" onClick={ () => props.removePlayer(props.id) }>✖</button>
         { props.name }
       </span>
 
@@ -70,26 +71,60 @@ class Counter extends React.Component {
   }
 }
 
-const App = (props) => {
-  return (
-    <div className="scoreboard">
-      <Header 
-        title="Scoreboard" 
-        totalPlayers={props.initialPlayers.length} 
-      />
+class App extends React.Component {
 
-      {/* Players list */}
-      {props.initialPlayers.map( player =>
-        <Player 
-          name={player.name}
-          key={player.id.toString()}            
-        />
-      )}
-    </div>
-  );
+  state = {
+    players: [
+      {
+        name: "Guil",        
+        id: 1
+      },
+      {
+        name: "Treasure",
+        id: 2
+      },
+      {
+        name: "Ashley",
+        id: 3
+      },
+      {
+        name: "James",
+        id: 4
+      }
+    ]
+  };
+
+  /**
+   * ! NOTE: You can pass functions as props, which is how 'handleRemovePlayer' will be passed to the player component
+   */
+  handleRemovePlayer = (id) => {
+
+    // We aren't modifying state directly here, you shouldn't do that. You have to a create a new array that no longer contains
+    // the player you want to remove. A common way to do this is the filter method. It removes elements from an array without
+    // changing the original array 
+    this.setState( prevState => ({
+      // filter takes a callback function. The 1st parameter represents the current item when iterating. 'p' stands for player
+      // The call back function is saying "Return all players except the player with this specific id"
+      players: prevState.players.filter( p => p.id !== id )
+    }));
+  }
+
+  render() {
+    return (
+      <div className="scoreboard">
+        <Header title="Scoreboard" totalPlayers={this.state.players.length} />
+  
+        {/* Players list */}
+        {this.state.players.map( player =>
+          // ! Note how the handleRemovePlayer function is being passed down
+          <Player name={player.name} id={player.id} key={player.id.toString()} removePlayer={this.handleRemovePlayer} />
+        )}
+      </div>
+    );
+  }  
 }
 
 ReactDOM.render(
-  <App initialPlayers={players} />,
+  <App />,
   document.getElementById('root')
 );
