@@ -81,19 +81,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="scoreboard">
-        <Header 
-          title="Scoreboard" 
-          totalPlayers={this.state.players.length} 
-        />
+        <Header title="Scoreboard" totalPlayers={this.state.players.length} />
   
         {/* Players list */}
         {this.state.players.map( player =>
-          <Player 
-            name={player.name}
-            id={player.id}
-            key={player.id.toString()} 
-            removePlayer={this.handleRemovePlayer}           
-          />
+          <Player name={player.name} id={player.id} key={player.id.toString()} removePlayer={this.handleRemovePlayer} />
         )}
       </div>
     );
