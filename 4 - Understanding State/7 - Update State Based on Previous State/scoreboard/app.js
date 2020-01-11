@@ -1,6 +1,6 @@
 const players = [
   {
-    name: "Guil",
+    name: "Chris",
     score: 50,
     id: 1
   },
@@ -48,15 +48,20 @@ class Counter extends React.Component {
   };
 
   incrementScore = () => {
-    this.setState({
-      score: this.state.score + 1
-    });
+    // Updateing state based on previous state in a more reliable way via a call back function
+    /*
+      1st argument.) give previous state
+      2nd argument.) OPTIONAL; props at the time the update is applied
+    */
+    this.setState( prevState => ({
+      score: prevState.score + 1
+    }));
   }
 
   decrementScore = () => {
-    this.setState({
-      score: this.state.score - 1
-    });
+    this.setState( prevState => ({
+      score: prevState.score - 1
+    }));
   }
 
   render() {
@@ -73,17 +78,11 @@ class Counter extends React.Component {
 const App = (props) => {
   return (
     <div className="scoreboard">
-      <Header 
-        title="Scoreboard" 
-        totalPlayers={props.initialPlayers.length} 
-      />
+      <Header title="Scoreboard" totalPlayers={props.initialPlayers.length} />
 
       {/* Players list */}
       {props.initialPlayers.map( player =>
-        <Player 
-          name={player.name}
-          key={player.id.toString()}            
-        />
+        <Player name={player.name} key={player.id.toString()} />
       )}
     </div>
   );
