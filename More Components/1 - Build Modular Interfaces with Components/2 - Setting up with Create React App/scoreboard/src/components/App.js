@@ -36,11 +36,27 @@ class App extends Component {
     ]
   };
 
+  // player id counter
+  prevPlayerId = 4;
+
   handleScoreChange = (index, howToChangeScore) => {
+    // ! IMPORTANT NOTE: setState is react's recommended way of updating state (prevState is not required but recommended to avoid inconsistency issues)
       this.setState( prevState => ({
         score: prevState.players[index].score += howToChangeScore
       }));
       // console.log('index: ' + index, 'howToChangeScore: ' + howToChangeScore);
+  }
+
+  handleAddPlayer = (name) => {
+    let newPlayer = {
+      name,
+      score: 0,
+      id: this.prevPlayerId += 1
+    };
+    
+    this.setState( prevState => ({
+      players: prevState.players.concat(newPlayer)
+    }));
   }
 
   handleRemovePlayer = (id) => {
@@ -72,7 +88,7 @@ class App extends Component {
             removePlayer={this.handleRemovePlayer}           
           />          
         )}
-        <AddPlayerForm />
+        <AddPlayerForm addPlayer={this.handleAddPlayer}/>
       </div>
     );
   }

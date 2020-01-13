@@ -12,10 +12,19 @@ class AddPlayerForm extends Component {
         this.setState({ value: e.target.value });
     }
 
+    handleSubmit = (e) => {
+        // this prevents the forms default behavior
+        e.preventDefault();
+        this.props.addPlayer(this.state.value);
+        //sets form back to an empty string
+        this.setState({value: ''});
+    }
+
     render() {
         console.log(this.state.value);
         return (
-            <form>
+            // the onSubmit event will execute our custom handleSubmit function when submitting
+            <form onSubmit={this.handleSubmit}>
             {/* NOTE: JSX requires a self closing tag for input elements */}
                 <input
                     type="text"
